@@ -12,7 +12,14 @@ A monorepo containing a React TypeScript frontend and Laravel API backend.
 
 ### 1. Clone the repository
 ```bash
-git clone <repo-url> lawnstarter
+git clone https://github.com/joelsaxton/lawnstarter.git lawnstarter
+```
+OR 
+```
+git clone git@github.com:joelsaxton/lawnstarter.git
+```
+then
+```
 cd lawnstarter
 ````
 
