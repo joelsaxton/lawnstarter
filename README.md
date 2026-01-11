@@ -71,9 +71,7 @@ Runs Laravel's task scheduler which executes scheduled commands. Currently confi
 - **Star Wars API Stats**: Calculates API usage statistics every 5 minutes
 
 ### Queue Worker
-Processes background jobs from the Redis queue, including:
-- Star Wars API statistics calculation
-- Other async tasks
+Processes the Star Wars API statistics calculation background job from the Redis queue.
 
 You can monitor the queue worker logs:
 ```bash
@@ -125,18 +123,6 @@ docker compose exec frontend sh
 
 # Or run npm commands directly
 docker compose exec frontend npm <command>
-```
-
-### Redis
-```bash
-# Access Redis CLI
-sail redis-cli
-
-# Check cached stats
-sail redis-cli GET laravel_database_star_wars_api_stats
-
-# Monitor Redis commands in real-time
-sail redis-cli MONITOR
 ```
 
 ### Docker

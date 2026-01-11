@@ -1,4 +1,4 @@
-# Star Wars API Documentation
+# Lawnstarter Star Wars API Documentation
 
 Base URL: `http://localhost/api` (development)
 

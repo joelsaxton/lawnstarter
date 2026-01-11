@@ -165,9 +165,18 @@ const Home = () => {
                                 <Typography sx={{ color: '#000' }}>Searching...</Typography>
                             </Box>
                         ) : !hasSearched || results.length === 0 ? (
-                            <Typography sx={{ color: '#666', mt: 2 }}>
-                                There are zero matches. Use the form to search for People or Movies.
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    minHeight: 450
+                                }}
+                            >
+                                <Typography sx={{ color: '#999', mt: 2, textAlign: 'center', fontWeight: 600 }}>
+                                    There are zero matches. Use the form to search for People or Movies.
+                                </Typography>
+                            </Box>
                         ) : (
                             <List>
                                 {results.map((result) => (
