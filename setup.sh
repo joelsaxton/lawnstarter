@@ -5,7 +5,7 @@ set -e
 echo "🚀 Setting up Lawnstarter project..."
 echo ""
 
-# Check if .env exists
+# Check if .env.example exists
 if [ ! -f .env ]; then
     echo "📝 Copying .env.example to .env..."
     cp .env.example .env
@@ -18,7 +18,7 @@ fi
 
 echo ""
 
-# Check if backend/.env exists
+# Check if backend/.env.example exists
 if [ ! -f backend/.env ]; then
     echo "📝 Copying backend/.env.example to backend/.env..."
     cp backend/.env.example backend/.env

@@ -25,11 +25,6 @@ services:
       - redis
 
   scheduler:
-    build:
-      context: ./backend/vendor/laravel/sail/runtimes/8.3
-      dockerfile: Dockerfile
-      args:
-        WWWGROUP: '${WWWGROUP}'
     image: sail-8.3/app
     extra_hosts:
       - 'host.docker.internal:host-gateway'
@@ -46,11 +41,6 @@ services:
     command: php artisan schedule:work
 
   queue:
-    build:
-      context: ./backend/vendor/laravel/sail/runtimes/8.3
-      dockerfile: Dockerfile
-      args:
-        WWWGROUP: '${WWWGROUP}'
     image: sail-8.3/app
     extra_hosts:
       - 'host.docker.internal:host-gateway'
