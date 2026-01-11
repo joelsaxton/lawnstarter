@@ -55,6 +55,7 @@ echo "   echo \"alias sail='sh \\\$([ -f sail ] && echo sail || echo backend/ven
 echo "   source ~/.zshrc"
 echo ""
 echo "2. Start the application:"
+echo "   sail build"
 echo "   sail up -d"
 echo ""
 echo "3. Run migrations:"
