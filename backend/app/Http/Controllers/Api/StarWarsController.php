@@ -86,12 +86,12 @@ class StarWarsController extends Controller
     }
 
     /**
-     * Flatten results - handles both single objects and arrays of objects.
+     * Format results - handles both single objects and arrays of objects.
      *
      * @param mixed $result
      * @return array|null
      */
-    private function flattenResults(mixed $result): ?array
+    private function formatResponse(mixed $result): ?array
     {
         if ($result === null) {
             return null;
@@ -108,6 +108,75 @@ class StarWarsController extends Controller
         }
 
         return (array) $result;
+    }
+
+    /**
+     * Extract film ID from a SWAPI film URL.
+     *
+     * @param string $filmUrl
+     * @return int|null
+     */
+    private function extractFilmId(string $filmUrl): ?int
+    {
+        // Extract ID from URL like "https://www.swapi.tech/api/films/1"
+        if (preg_match('/\/films\/(\d+)$/', $filmUrl, $matches)) {
+            return (int) $matches[1];
+        }
+        return null;
+    }
+
+    /**
+     * Fetch movies from an array of film URLs.
+     *
+     * @param array $filmUrls
+     * @return array
+     */
+    private function fetchMovies(array $filmUrls): array
+    {
+        $movies = [];
+
+        foreach ($filmUrls as $filmUrl) {
+            $filmId = $this->extractFilmId($filmUrl);
+
+            if ($filmId === null) {
+                continue;
+            }
+
+            try {
+                // Fetch the film without logging (to avoid cluttering logs)
+                $filmResponse = $this->starWarsApiClient->get("films/$filmId");
+
+                if (isset($filmResponse->result->properties->title)) {
+                    $movies[] = [
+                        'id' => $filmId,
+                        'title' => $filmResponse->result->properties->title,
+                    ];
+                }
+            } catch (Throwable $e) {
+                // If we can't fetch a film, just skip it
+                continue;
+            }
+        }
+
+        return $movies;
+    }
+
+    /**
+     * Format person response with enhanced film information.
+     *
+     * @param array $person
+     * @return array
+     */
+    private function formatPersonResponse(array $person): array
+    {
+        // Check if films array exists
+        if (isset($person['films']) && is_array($person['films'])) {
+            $person['movies'] = $this->fetchMovies($person['films']);
+            // Remove the original films URLs array
+            unset($person['films']);
+        }
+
+        return $person;
     }
 
     /**
@@ -129,9 +198,9 @@ class StarWarsController extends Controller
             fn () => $this->starWarsApiClient->get('people', ['name' => $name])
         );
 
-        $flattened = $this->flattenResults($res->result ?? []);
+        $formatted = $this->formatResponse($res->result ?? []);
 
-        return response()->json($flattened);
+        return response()->json($formatted);
     }
 
     /**
@@ -151,9 +220,13 @@ class StarWarsController extends Controller
             fn () => $this->starWarsApiClient->get("people/$id")
         );
 
-        $flattened = $this->flattenResults($res->result ?? null);
+        $formatted = $this->formatResponse($res->result ?? null);
 
-        return response()->json($flattened);
+        if ($formatted !== null) {
+            $formatted = $this->formatPersonResponse($formatted);
+        }
+
+        return response()->json($formatted);
     }
 
     /**
@@ -175,11 +248,19 @@ class StarWarsController extends Controller
             fn () => $this->starWarsApiClient->get('films', ['title' => $title])
         );
 
-        $flattened = $this->flattenResults($res->result ?? []);
+        $formatted = $this->formatResponse($res->result ?? []);
 
-        return response()->json($flattened);
+        return response()->json($formatted);
     }
 
+    /**
+     * Get Star Wars film via ID
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     * @throws Throwable
+     */
     /**
      * Get Star Wars film via ID
      *
@@ -197,9 +278,13 @@ class StarWarsController extends Controller
             fn () => $this->starWarsApiClient->get("films/$id")
         );
 
-        $flattened = $this->flattenResults($res->result ?? null);
+        $formatted = $this->formatResponse($res->result ?? null);
 
-        return response()->json($flattened);
+        if ($formatted !== null) {
+            $formatted = $this->formatFilmResponse($formatted);
+        }
+
+        return response()->json($formatted);
     }
 
     /**
@@ -210,5 +295,72 @@ class StarWarsController extends Controller
         $res = Cache::get('star_wars_api_stats');
 
         return response()->json($res);
+    }
+
+    /**
+     * Extract person ID from a SWAPI person URL.
+     *
+     * @param string $personUrl
+     * @return int|null
+     */
+    private function extractPersonId(string $personUrl): ?int
+    {
+        // Extract ID from URL like "https://www.swapi.tech/api/people/1"
+        if (preg_match('/\/people\/(\d+)$/', $personUrl, $matches)) {
+            return (int) $matches[1];
+        }
+        return null;
+    }
+
+    /**
+     * Fetch characters from an array of person URLs.
+     *
+     * @param array $personUrls
+     * @return array
+     */
+    private function fetchCharacters(array $personUrls): array
+    {
+        $characters = [];
+
+        foreach ($personUrls as $personUrl) {
+            $personId = $this->extractPersonId($personUrl);
+
+            if ($personId === null) {
+                continue;
+            }
+
+            try {
+                // Fetch the person without logging (to avoid cluttering logs)
+                $personResponse = $this->starWarsApiClient->get("people/$personId");
+
+                if (isset($personResponse->result->properties->name)) {
+                    $characters[] = [
+                        'id' => $personId,
+                        'name' => $personResponse->result->properties->name,
+                    ];
+                }
+            } catch (Throwable $e) {
+                // If we can't fetch a character, just skip it
+                continue;
+            }
+        }
+
+        return $characters;
+    }
+
+    /**
+     * Format film response with enhanced character information.
+     *
+     * @param array $film
+     * @return array
+     */
+    private function formatFilmResponse(array $film): array
+    {
+        // Check if characters array exists
+        if (isset($film['characters']) && is_array($film['characters'])) {
+            $film['characters'] = $this->fetchCharacters($film['characters']);
+        }
+
+        return $film;
     }
 }

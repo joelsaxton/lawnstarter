@@ -368,4 +368,146 @@ class StarWarsControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([]);
     }
+    public function test_get_person_by_id_includes_movies(): void
+    {
+        $personResponse = [
+            'message' => 'ok',
+            'result' => [
+                'properties' => [
+                    'name' => 'Luke Skywalker',
+                    'birth_year' => '19BBY',
+                    'gender' => 'male',
+                    'films' => [
+                        'https://www.swapi.tech/api/films/1',
+                        'https://www.swapi.tech/api/films/2',
+                    ],
+                ],
+                'uid' => '1',
+            ],
+        ];
+
+        $film1Response = [
+            'message' => 'ok',
+            'result' => [
+                'properties' => [
+                    'title' => 'A New Hope',
+                ],
+            ],
+        ];
+
+        $film2Response = [
+            'message' => 'ok',
+            'result' => [
+                'properties' => [
+                    'title' => 'The Empire Strikes Back',
+                ],
+            ],
+        ];
+
+        // Mock the person call
+        $this->instance(
+            StarWarsApiClient::class,
+            Mockery::mock(StarWarsApiClient::class, function (MockInterface $mock) use ($personResponse, $film1Response, $film2Response) {
+                // First call for the person
+                $mock->shouldReceive('get')
+                    ->with('people/1')
+                    ->once()
+                    ->andReturn(json_decode(json_encode($personResponse)));
+
+                // Second call for film 1
+                $mock->shouldReceive('get')
+                    ->with('films/1')
+                    ->once()
+                    ->andReturn(json_decode(json_encode($film1Response)));
+
+                // Third call for film 2
+                $mock->shouldReceive('get')
+                    ->with('films/2')
+                    ->once()
+                    ->andReturn(json_decode(json_encode($film2Response)));
+            })
+        );
+
+        $response = $this->getJson(route('starwars.person.id', ['id' => 1]));
+
+        $response->assertStatus(200)
+            ->assertJsonPath('name', 'Luke Skywalker')
+            ->assertJsonPath('movies.0.id', 1)
+            ->assertJsonPath('movies.0.title', 'A New Hope')
+            ->assertJsonPath('movies.1.id', 2)
+            ->assertJsonPath('movies.1.title', 'The Empire Strikes Back')
+            ->assertJsonCount(2, 'movies')
+            ->assertJsonMissing(['films']); // Ensure films array is removed
+    }
+    
+    public function test_get_film_by_id_includes_characters(): void
+    {
+        $filmResponse = [
+            'message' => 'ok',
+            'result' => [
+                'properties' => [
+                    'title' => 'A New Hope',
+                    'opening_crawl' => 'It is a period of civil war...',
+                    'director' => 'George Lucas',
+                    'characters' => [
+                        'https://www.swapi.tech/api/people/1',
+                        'https://www.swapi.tech/api/people/5',
+                    ],
+                ],
+                'uid' => '1',
+            ],
+        ];
+
+        $person1Response = [
+            'message' => 'ok',
+            'result' => [
+                'properties' => [
+                    'name' => 'Luke Skywalker',
+                ],
+            ],
+        ];
+
+        $person2Response = [
+            'message' => 'ok',
+            'result' => [
+                'properties' => [
+                    'name' => 'Leia Organa',
+                ],
+            ],
+        ];
+
+        // Mock the film call
+        $this->instance(
+            StarWarsApiClient::class,
+            Mockery::mock(StarWarsApiClient::class, function (MockInterface $mock) use ($filmResponse, $person1Response, $person2Response) {
+                // First call for the film
+                $mock->shouldReceive('get')
+                    ->with('films/1')
+                    ->once()
+                    ->andReturn(json_decode(json_encode($filmResponse)));
+
+                // Second call for person 1
+                $mock->shouldReceive('get')
+                    ->with('people/1')
+                    ->once()
+                    ->andReturn(json_decode(json_encode($person1Response)));
+
+                // Third call for person 5
+                $mock->shouldReceive('get')
+                    ->with('people/5')
+                    ->once()
+                    ->andReturn(json_decode(json_encode($person2Response)));
+            })
+        );
+
+        $response = $this->getJson(route('starwars.film.id', ['id' => 1]));
+
+        $response->assertStatus(200)
+            ->assertJsonPath('title', 'A New Hope')
+            ->assertJsonPath('characters.0.id', 1)
+            ->assertJsonPath('characters.0.name', 'Luke Skywalker')
+            ->assertJsonPath('characters.1.id', 5)
+            ->assertJsonPath('characters.1.name', 'Leia Organa')
+            ->assertJsonCount(2, 'characters');
+    }
 }

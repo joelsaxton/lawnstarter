@@ -10,14 +10,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CalculateStarWarsApiStats implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public const CACHE_KEY = 'star_wars_api_stats';
+
     public function handle(): void
     {
+        Log::info('CalculateStarWarsApiStats::handle() - Generating Star Wars API Stats');
+
         $stats = [
             'all_time' => $this->calculateStats(),
             'last_30_days' => $this->calculateStats(Carbon::now()->subDays(30)),
@@ -26,7 +30,7 @@ class CalculateStarWarsApiStats implements ShouldQueue
             'generated_at' => Carbon::now()->toIso8601String(),
         ];
 
-        Cache::put('star_wars_api_stats', $stats);
+        Cache::put(self::CACHE_KEY, $stats);
     }
 
     private function calculateStats(?Carbon $since = null): array
