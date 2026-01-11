@@ -20,11 +20,6 @@ class StarWarsApiClient
         $this->client = Http::baseUrl(self::BASE_URL)->acceptJson();
     }
 
-    public function client(): PendingRequest
-    {
-        return $this->client;
-    }
-
     /**
      * @param string $url
      * @param array $query

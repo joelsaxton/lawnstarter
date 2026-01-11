@@ -5,6 +5,10 @@ namespace App\Console\Commands;
 use App\Jobs\CalculateStarWarsApiStats;
 use Illuminate\Console\Command;
 
+/**
+ * This command runs on a schedule and invokes the CalculateStarWarsApiStats
+ * queueable job to update and cache Star Wars API statistics.
+ */
 class CalculateStarWarsApiStatsCommand extends Command
 {
     protected $signature = 'stats:calculate-star-wars-api';

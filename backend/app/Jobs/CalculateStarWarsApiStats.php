@@ -12,6 +12,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Builds redis cached statistical data for the Star Wars API over
+ * multiple time periods: all time, 30 days, 7 days and 24 hours
+ */
 class CalculateStarWarsApiStats implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
