@@ -1,4 +1,4 @@
-# Lawnstarter
+# Lawnstarter Star Wars App
 
 A monorepo containing a React TypeScript frontend and Laravel API backend.
 
@@ -16,7 +16,7 @@ git clone https://github.com/joelsaxton/lawnstarter.git lawnstarter
 ```
 OR 
 ```
-git clone git@github.com:joelsaxton/lawnstarter.git
+git clone git@github.com:joelsaxton/lawnstarter.git lawnstarter
 ```
 then
 ```
