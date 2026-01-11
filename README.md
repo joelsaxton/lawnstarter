@@ -45,6 +45,7 @@ source ~/.zshrc
 
 ### 4. Start the application
 ```bash
+sail build
 sail up -d
 ```
 
