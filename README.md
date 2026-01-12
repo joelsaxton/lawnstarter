@@ -111,9 +111,6 @@ docker compose restart scheduler
 ## Stopping the application
 ```bash
 sail down
-
-# Stop and remove volumes (WARNING: deletes database data)
-sail down -v
 ```
 
 ## Architecture Notes
@@ -124,9 +121,9 @@ sail down -v
 
 ### Cache System
 - Uses Redis for caching
-- Stats are cached and regenerated every 5 minutes
+- Star Wars API stats are cached and regenerated every 5 minutes
 - Cache key: `star_wars_api_stats`
 
 ### Scheduler
 - Runs `php artisan schedule:work`
-- Runs Star Wars API stats calculation every 5 minutes
+- Runs Star Wars API stats update every 5 minutes
