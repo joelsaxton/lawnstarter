@@ -143,7 +143,10 @@ class StarWarsController extends Controller
             }
 
             try {
-                // Fetch the film without logging (to avoid cluttering logs)
+                /**
+                 * @todo - This is effectively an n+1 problem, due to needing the film's title, not just the id.
+                 * @todo - You could basically scrape then cache this API data.
+                 */
                 $filmResponse = $this->starWarsApiClient->get("films/$filmId");
 
                 if (isset($filmResponse->result->properties->title)) {
@@ -330,7 +333,10 @@ class StarWarsController extends Controller
             }
 
             try {
-                // Fetch the person without logging (to avoid cluttering logs)
+                /**
+                 * @todo - This is effectively an n+1 problem, due to needing the person's name, not just the id.
+                 * @todo - You could basically scrape then cache this API data.
+                 */
                 $personResponse = $this->starWarsApiClient->get("people/$personId");
 
                 if (isset($personResponse->result->properties->name)) {

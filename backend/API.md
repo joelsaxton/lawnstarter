@@ -14,6 +14,9 @@ Base URL: `http://localhost/api`
 ## Dependencies
 The Star Wars API is retrieved by`StarWarsApiClient`
 
+## Known Issues
+Due to requiring a film's title or a person's name, we have two methods in `StarWarsController` where we effectively have an n+1 problem, but with API calls, not database calls. This is due to needing more information than just the ID for some relations. SWAPI's docs said that using the `?expand=true` query string param would address this issue, but in my testing I saw no effect in the API responses. I decided not to scrape/cache this data, but doing something like that would help performance.
+
 # Star Wars Endpoints
 ## Person
 
