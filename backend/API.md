@@ -1,6 +1,6 @@
-# Lawnstarter Star Wars API Documentation
+# Joel's Lawnstarter Star Wars API Documentation
 
-Base URL: `http://localhost/api` (development)
+Base URL: `http://localhost/api`
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ Base URL: `http://localhost/api` (development)
 
 ### GET /health
 
-Check if the API is running and responsive.
+Check if the API is running.
 
 **Response:**
 
@@ -28,11 +28,12 @@ Check if the API is running and responsive.
 
 **Status Codes:**
 
-- `200 OK` - API is healthy
+- `200 OK` - API is running
 
 ---
 
-## Person Endpoints
+# Star Wars Endpoints
+## Person
 
 ### GET /starwars/person?name={query}
 
@@ -120,7 +121,7 @@ GET /api/starwars/person/1
 
 **Notes:**
 
-- The `movies` array contains enriched data with movie IDs and titles
+- The `movies` array contains formatted data with movie IDs and titles
 - The original `films` URLs array is removed from the response
 
 **Status Codes:**
@@ -286,13 +287,13 @@ GET /api/starwars/stats
         "grand_total": 370
     },
     "last_30_days": {
-        /* Same structure */
+        /* Same as all_time */
     },
     "last_7_days": {
-        /* Same structure */
+        /* Same as all_time */
     },
     "last_24_hours": {
-        /* Same structure */
+        /* Same as all_time */
     },
     "generated_at": "2026-01-11T18:30:00+00:00"
 }
@@ -411,17 +412,9 @@ All endpoints may return the following error formats:
 
 ---
 
-## Rate Limiting
-
-Currently no rate limiting is implemented. API calls are logged for analytics purposes.
-
-## CORS
-
-CORS is configured to allow requests from the frontend application running on `http://localhost:5173`.
-
 ## Authentication
 
-No authentication is currently required for any endpoints.
+No authentication was used for this API.
 
 ---
 

@@ -1,12 +1,9 @@
 # Lawnstarter Star Wars App
 
-A monorepo containing a React TypeScript frontend and Laravel API backend.
+I set up a React front end in Typescript, and a Laravel back using Sail
 
-## Prerequisites
-
-- Docker & Docker Compose
-- Node.js 20+ (for local frontend development)
-- PHP 8.3+ & Composer (for local backend development)
+## API Note
+For API documentation see `backend/API.md`. I wrote tests for the API endpoints as well as the Star Wars API stats job. See the tests folder.
 
 ## Quick Start
 
@@ -87,43 +84,13 @@ sail logs -f queue
 
 ## Development Commands
 
-### Backend (Laravel)
+### Testing the Back End
 ```bash
-# Run artisan commands
-sail artisan <command>
-
-# Run composer
-sail composer <command>
-
 # Run tests
-sail artisan test
-
-# Access the container shell
-sail shell
-
-# Run Tinker
-sail tinker
-
-# Manually trigger stats calculation
-sail artisan stats:calculate-star-wars-api
-
-# Monitor queue jobs
-sail artisan queue:monitor
-
-# Clear cache
-sail artisan cache:clear
+sail test
 ```
 
-> **Note**: If you want to test the Star Wars endpoint directly, I recommend running Postman as a local application. Make sure the `Accept` and `Content-Type` headers are both `application/json`
-
-### Frontend (React)
-```bash
-# Access frontend container
-docker compose exec frontend sh
-
-# Or run npm commands directly
-docker compose exec frontend npm <command>
-```
+> **Note**: If you want to test the Star Wars endpoints directly, I recommend running Postman as a local application. Make sure the `Accept` and `Content-Type` headers are both `application/json`
 
 ### Docker
 ```bash
@@ -136,56 +103,9 @@ sail down
 # View logs for all services
 sail logs
 
-# View logs for specific service
-sail logs -f queue
-sail logs -f scheduler
-sail logs -f laravel.test
-
-# Rebuild containers
-sail build --no-cache
-
 # Restart a specific service
 docker compose restart queue
 docker compose restart scheduler
-```
-
-## Troubleshooting
-
-### Queue not processing jobs
-```bash
-# Check queue worker logs
-sail logs -f queue
-
-# Restart the queue worker
-docker compose restart queue
-```
-
-### Scheduler not running
-```bash
-# Check scheduler logs
-sail logs -f scheduler
-
-# Restart the scheduler
-docker compose restart scheduler
-```
-
-### Redis connection issues
-```bash
-# Check Redis is running
-sail redis-cli ping
-# Should return: PONG
-
-# Check Redis stats
-sail redis-cli INFO
-```
-
-### Clear all caches and restart
-```bash
-sail artisan cache:clear
-sail artisan config:clear
-sail artisan route:clear
-sail artisan view:clear
-docker compose restart
 ```
 
 ## Stopping the application
@@ -199,16 +119,14 @@ sail down -v
 ## Architecture Notes
 
 ### Queue System
-- Uses Redis for fast, reliable job queuing
-- Queue worker processes jobs with 3 retry attempts
-- 90-second timeout per job
+- Uses Redis for queuing
+- Default queue worker config, e.g. 3 retries
 
 ### Cache System
-- Uses Redis for high-performance caching
+- Uses Redis for caching
 - Stats are cached and regenerated every 5 minutes
 - Cache key: `star_wars_api_stats`
 
 ### Scheduler
-- Runs `php artisan schedule:work` continuously
-- Checks for scheduled tasks every minute
-- Currently runs stats calculation every 5 minutes with overlap prevention
+- Runs `php artisan schedule:work`
+- Runs Star Wars API stats calculation every 5 minutes
