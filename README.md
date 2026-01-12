@@ -2,8 +2,8 @@
 
 I set up a React front end in Typescript, and a Laravel back using Sail
 
-## API Note
-For API documentation see `backend/API.md`. I wrote tests for the API endpoints as well as the Star Wars API stats job. See the tests folder.
+## Note
+For API documentation see `backend/API.md`. I wrote tests for the API endpoints as well as the Star Wars API stats job. See the `backend/tests` folder. For front end documentation, see `frontend/README.md`.
 
 ## Quick Start
 
