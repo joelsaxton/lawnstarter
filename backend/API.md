@@ -227,7 +227,7 @@ GET /api/starwars/film/1
 
 ### GET /starwars/stats
 
-Get comprehensive statistics about API usage, updated every 5 minutes.
+Get comprehensive statistics about API usage. This data is updated via scheduled queue job and cached in Redis every 5 minutes.
 
 **Example Request:**
 
