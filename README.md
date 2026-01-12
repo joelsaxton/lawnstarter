@@ -70,11 +70,6 @@ Runs Laravel's task scheduler which executes scheduled commands. Currently confi
 ### Queue Worker
 Processes the Star Wars API statistics calculation background job from the Redis queue.
 
-You can monitor the queue worker logs:
-```bash
-sail logs -f queue
-```
-
 ## Access
 
 - **Frontend**: http://localhost:5173
