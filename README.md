@@ -103,11 +103,6 @@ docker compose restart queue
 docker compose restart scheduler
 ```
 
-## Stopping the application
-```bash
-sail down
-```
-
 ## Architecture Notes
 
 ### Queue System
@@ -121,4 +116,4 @@ sail down
 
 ### Scheduler
 - Runs `php artisan schedule:work`
-- Runs Star Wars API stats update every 5 minutes
+- Triggers Star Wars API stats job every 5 minutes

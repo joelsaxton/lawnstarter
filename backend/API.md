@@ -11,26 +11,8 @@ Base URL: `http://localhost/api`
 
 ---
 
-## Health Check
-
-### GET /health
-
-Check if the API is running.
-
-**Response:**
-
-```json
-{
-    "status": "ok",
-    "timestamp": "2026-01-11T18:30:00+00:00"
-}
-```
-
-**Status Codes:**
-
-- `200 OK` - API is running
-
----
+## Dependencies
+The Star Wars API is retrieved by`StarWarsApiClient`
 
 # Star Wars Endpoints
 ## Person
@@ -374,8 +356,29 @@ GET /api/starwars/stats
     }>;
 }
 ```
+---
+
+## Health Check
+
+### GET /health
+
+Check if the API is running.
+
+**Response:**
+
+```json
+{
+    "status": "ok",
+    "timestamp": "2026-01-11T18:30:00+00:00"
+}
+```
+
+**Status Codes:**
+
+- `200 OK` - API is running
 
 ---
+
 
 ## Error Responses
 
